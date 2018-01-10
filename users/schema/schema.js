@@ -44,10 +44,10 @@ const UserType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    user: {
+    user: { // If you give me the userId in your query, I will return an object of UserType.
       type: UserType,
       args: { id: { type: GraphQLString } },
-      resolve(parentValue, args) {
+      resolve(parentValue, args) { //This is where we actually go into our DB to find the actual data we are looking for. parentValue is almost never used. args has all the arguments that was passed when querying.
         return axios.get(`http://localhost:3000/users/${args.id}`)
           .then(resp => resp.data);
       }
@@ -90,6 +90,8 @@ const mutation = new GraphQLObjectType({
     }
   }
 });
+
+//GraphQLSchema takes the root query and return a GraphQLSchema instance. 
 
 module.exports = new GraphQLSchema({
   mutation,
