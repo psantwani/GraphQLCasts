@@ -55,6 +55,8 @@ const mutation = gql`
   }
 `;
 
+//graphql doesnt take multiple paramters..
+//hence we couldnt do graphql(query, mutation)(SongList)
 export default graphql(mutation)(
   graphql(query)(SongList)
 );

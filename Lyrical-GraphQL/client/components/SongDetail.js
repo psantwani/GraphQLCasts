@@ -7,6 +7,7 @@ import LyricList from './LyricList';
 
 class SongDetail extends Component {
   render() {
+    console.log(this.props); //to check router's role in setting params.id
     const { song } = this.props.data;
 
     if (!song) { return <div>Loading...</div>; }
@@ -22,6 +23,7 @@ class SongDetail extends Component {
   }
 }
 
+//params.id is coming from the get URL parameters.
 export default graphql(fetchSong, {
   options: (props) => { return { variables: { id: props.params.id } } }
 })(SongDetail);

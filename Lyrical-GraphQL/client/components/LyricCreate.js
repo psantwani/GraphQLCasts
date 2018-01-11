@@ -33,6 +33,10 @@ class LyricCreate extends Component {
   }
 }
 
+/**because of the line added in index.js about dataIdFromObject,
+everytime we apollo that x song ID has an update, it will tell 
+react to rerender lyrics.
+**/
 const mutation = gql`
   mutation AddLyricToSong($content: String, $songId: ID) {
     addLyricToSong(content: $content, songId: $songId) {

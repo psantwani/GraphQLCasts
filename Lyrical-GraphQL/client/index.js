@@ -12,8 +12,10 @@ import SongCreate from './components/SongCreate';
 import SongDetail from './components/SongDetail';
 
 //ApolloClient assumes that we'll be listening to /graphql endpoints as mentioned in server.js
+
 const client = new ApolloClient({
-  dataIdFromObject: o => o.id
+  //Following is a caching system. If you dont use this, you could use the refetch way to update client.
+  dataIdFromObject: o => o.id // this makes apollo client takes every piece of data and pass it through the function. The result of this function is saved inside the apollo store. Only works when all the IDs in our appln is unique
 });
 
 const Root = () => {
