@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'; //graphql-tag allows us to write GraphQL queries inside React components.
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router';
 import query from '../queries/fetchSongs';
