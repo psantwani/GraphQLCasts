@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag'; //graphql-tag allows us to write GraphQL queries inside React components.
-import { graphql } from 'react-apollo';
+import { graphql } from 'react-apollo'; //to bond the component with an actual query.
 import { Link } from 'react-router';
 import query from '../queries/fetchSongs';
 
@@ -29,7 +29,7 @@ class SongList extends Component {
   }
 
   render() {
-    if (this.props.data.loading) { return <div>Loading...</div>; }
+    if (this.props.data.loading) { return <div>Loading...</div>; } // You could check the console for this.props.data to see the difference
 
     return (
       <div>
