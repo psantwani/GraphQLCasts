@@ -11,7 +11,8 @@ const {
 
 const CompanyType = new GraphQLObjectType({
   name: 'Company',
-  fields: () => ({
+  fields: () => ({ // field is put inside a closure scope, so that it doesn't get executed till the entire file has been loaded. 
+    // Else it wouldn't find UserType which has been declared later in the file.
     id: { type: GraphQLString },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
@@ -32,8 +33,8 @@ const UserType = new GraphQLObjectType({
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
     company: {
-      type: CompanyType,
-      resolve(parentValue, args) {
+      type: CompanyType, // since companyType is a customType we need to add the resolve parameter to tell graphql how to interpret the data
+      resolve(parentValue, args) { //parentValue has the entire JSON data object for that user, including the companyId that we want to fetch.
         return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`)
           .then(res => res.data);
       }
@@ -63,6 +64,7 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+//Mutations are used to change our data in some way
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
@@ -87,9 +89,46 @@ const mutation = new GraphQLObjectType({
         return axios.delete(`http://localhost:3000/users/${id}`)
           .then(res => res.data);
       }
+    },
+    editUser: {
+     type: UserType, 
+     args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        firstName: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        companyId: { type: GraphQLString }
+     },
+     resolve(parentValue, args) {
+        return axios.patch(`http://localhost:3000/users/${args.id}`, {args})
+          .then(res => res.data);
+      }
     }
   }
 });
+
+/**
+A PUT request completely overwrites the entire existing body
+A PATCH request will only overwrite only select parameters.
+{
+  id: 23,
+  name: "Piyush"
+}
+Above PUT will make the data 
+{
+  id: 23,
+  name: "Piyush",
+  age: null, //overwriting the original values
+  company: null
+}
+Above PATCH will make the data
+{
+  id: 23,
+  name: "Piyush",
+  age: 30, //not affecting the original values
+  company: 1
+}
+
+**/
 
 module.exports = new GraphQLSchema({
   mutation,
